@@ -7,6 +7,8 @@ class AppColors {
   static const Color cardBackground = Color.fromARGB(255, 14, 26, 37);
   static const Color primaryText = Color(0xFFFFFFFF);
   static const Color secondaryText = Color(0xFFCCCCCC);
+  static const Color primaryTitleColor = Color(0xFF1CAAC2);
+  static const Color secondaryTitleColor = Color(0xFFCCCF60);
   static const Color blackText = Color(0xFF000000);
   static const Color details = Color(0xFFFF4FA3);
   static const Color success = Color(0xFF9EFFA1);
