@@ -5,7 +5,6 @@ class DioClient {
   static Dio get instance {
     final dio = Dio();
 
-    // Adiciona interceptors, como o PrettyDioLogger
     dio.interceptors.add(
       PrettyDioLogger(
         requestHeader: true,
