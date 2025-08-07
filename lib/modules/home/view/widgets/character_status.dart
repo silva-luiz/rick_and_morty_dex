@@ -51,30 +51,27 @@ class CharacterStatus extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 2),
-        SizedBox(
-          width: 400,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                _getSpeciesIcon(character.species),
-                size: 20,
-                color: AppColors.primaryText,
-              ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  character.species,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.primaryText,
-                  ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _getSpeciesIcon(character.species),
+              size: 20,
+              color: AppColors.primaryText,
+            ),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                character.species,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.primaryText,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
