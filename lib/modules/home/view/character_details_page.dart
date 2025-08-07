@@ -85,7 +85,7 @@ class CharacterDetailsPage extends StatelessWidget {
                 icon: Icons.location_on,
               ),
               InfoItem(
-                label: 'Number of Episodes',
+                label: 'Number of episodes',
                 value: '${character.episodeCount ?? 'Unknown'}',
                 icon: Icons.tv,
               ),

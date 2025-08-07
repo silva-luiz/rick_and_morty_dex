@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty_dex/modules/home/view/widgets/character_status.dart';
 import 'package:rick_and_morty_dex/modules/shared/colors/colors.dart';
 import '../../model/character_model.dart';
 
@@ -16,52 +17,30 @@ class CharacterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        color: AppColors.cardBackground,
-        elevation: 4,
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            Expanded(
-              child: Image.network(
-                character.image,
-                fit: BoxFit.cover,
+      child: SizedBox(
+        height: 560,
+        child: Card(
+          color: AppColors.cardBackground,
+          elevation: 6,
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 135,
                 width: double.infinity,
+                child:
+                    character.image.startsWith('http')
+                        ? Image.network(character.image, fit: BoxFit.cover)
+                        : Image.asset(character.image, fit: BoxFit.cover),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Text(
-                    character.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: AppColors.primary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    character.species,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: AppColors.details,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    character.status,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: AppColors.primaryText,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [CharacterStatus(character: character)],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
