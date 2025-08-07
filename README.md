@@ -60,6 +60,10 @@ O projeto está estruturado na arquitetura MVVM, contendo as seguintes camadas:
   - `shared/extensions/` – extensões utilizadas no projeto
   - `shared/widgets/` – widgets reutilizáveis e componentes compartilhados
 
+## Bônus
+
+O App possui um 'Easter Egg' na tela inicial.
+
 ## Licença
 
 Este projeto está licenciado sob a licença MIT.
