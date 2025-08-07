@@ -19,6 +19,60 @@ mixin _$CharacterStore on _CharacterStoreBase, Store {
           ))
           .value;
 
+  late final _$currentPageAtom = Atom(
+    name: '_CharacterStoreBase.currentPage',
+    context: context,
+  );
+
+  @override
+  int get currentPage {
+    _$currentPageAtom.reportRead();
+    return super.currentPage;
+  }
+
+  @override
+  set currentPage(int value) {
+    _$currentPageAtom.reportWrite(value, super.currentPage, () {
+      super.currentPage = value;
+    });
+  }
+
+  late final _$isLoadingMoreAtom = Atom(
+    name: '_CharacterStoreBase.isLoadingMore',
+    context: context,
+  );
+
+  @override
+  bool get isLoadingMore {
+    _$isLoadingMoreAtom.reportRead();
+    return super.isLoadingMore;
+  }
+
+  @override
+  set isLoadingMore(bool value) {
+    _$isLoadingMoreAtom.reportWrite(value, super.isLoadingMore, () {
+      super.isLoadingMore = value;
+    });
+  }
+
+  late final _$hasNextPageAtom = Atom(
+    name: '_CharacterStoreBase.hasNextPage',
+    context: context,
+  );
+
+  @override
+  bool get hasNextPage {
+    _$hasNextPageAtom.reportRead();
+    return super.hasNextPage;
+  }
+
+  @override
+  set hasNextPage(bool value) {
+    _$hasNextPageAtom.reportWrite(value, super.hasNextPage, () {
+      super.hasNextPage = value;
+    });
+  }
+
   late final _$isFallbackAtom = Atom(
     name: '_CharacterStoreBase.isFallback',
     context: context,
@@ -101,6 +155,18 @@ mixin _$CharacterStore on _CharacterStoreBase, Store {
     return _$getCharactersAsyncAction.run(() => super.getCharacters());
   }
 
+  late final _$loadMoreCharactersAsyncAction = AsyncAction(
+    '_CharacterStoreBase.loadMoreCharacters',
+    context: context,
+  );
+
+  @override
+  Future<void> loadMoreCharacters() {
+    return _$loadMoreCharactersAsyncAction.run(
+      () => super.loadMoreCharacters(),
+    );
+  }
+
   late final _$_CharacterStoreBaseActionController = ActionController(
     name: '_CharacterStoreBase',
     context: context,
@@ -121,6 +187,9 @@ mixin _$CharacterStore on _CharacterStoreBase, Store {
   @override
   String toString() {
     return '''
+currentPage: ${currentPage},
+isLoadingMore: ${isLoadingMore},
+hasNextPage: ${hasNextPage},
 isFallback: ${isFallback},
 searchQuery: ${searchQuery},
 characters: ${characters},

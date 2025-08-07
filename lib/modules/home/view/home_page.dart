@@ -4,27 +4,47 @@ import 'package:rick_and_morty_dex/modules/home/view/character_details_page.dart
 import 'package:rick_and_morty_dex/modules/home/view/widgets/character_card.dart';
 import 'package:rick_and_morty_dex/modules/home/viewmodel/character_store.dart';
 import 'package:rick_and_morty_dex/modules/shared/colors/colors.dart';
+import 'package:rick_and_morty_dex/modules/shared/widgets/custom_appbar.dart';
 import 'package:rick_and_morty_dex/modules/shared/widgets/spinning_image.dart';
+import 'package:rick_and_morty_dex/modules/welcome/viewmodel/welcome_store.dart';
 
 class HomePage extends StatefulWidget {
-  final CharacterStore store;
+  final CharacterStore characterStore;
+  final WelcomeStore welcomeStore;
 
-  const HomePage({super.key, required this.store});
+  const HomePage({
+    super.key,
+    required this.characterStore,
+    required this.welcomeStore,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late ScrollController _scrollController;
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 300) {
+      widget.characterStore.loadMoreCharacters();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    widget.store.getCharacters();
+    _scrollController = ScrollController()..addListener(_onScroll);
+
+    widget.characterStore.getCharacters();
   }
 
   @override
   void dispose() {
-    widget.store.dispose();
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    widget.characterStore.dispose();
     super.dispose();
   }
 
@@ -32,26 +52,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: TextField(
-          onChanged: widget.store.setSearchQuery,
-          style: const TextStyle(
-            color: AppColors.primaryText,
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
-          ),
-          decoration: const InputDecoration(
-            hintText: 'Find character',
-            hintStyle: TextStyle(color: AppColors.primaryText),
-            border: InputBorder.none,
-            icon: Icon(Icons.search, color: AppColors.primaryText),
-          ),
-        ),
-        backgroundColor: AppColors.primary,
+      appBar: CustomAppBar(
+        characterStore: widget.characterStore,
+        welcomeStore: widget.welcomeStore,
       ),
       body: Observer(
         builder: (_) {
-          if (widget.store.isLoading) {
+          if (widget.characterStore.isLoading) {
             return const Center(child: SpinningImage());
           }
 
@@ -72,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                 'Click on a character to see details',
                 style: TextStyle(color: AppColors.secondaryText, fontSize: 16),
               ),
-              if (widget.store.isFallback)
+              if (widget.characterStore.isFallback)
                 Container(
                   width: double.infinity,
                   color: AppColors.warning,
@@ -87,27 +94,44 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 3 / 4,
-                  ),
-                  itemCount: widget.store.filteredCharacters.length,
-                  itemBuilder: (_, index) {
-                    final character = widget.store.filteredCharacters[index];
-                    return CharacterCard(
-                      character: character,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (_) =>
-                                    CharacterDetailsPage(character: character),
+                child: Observer(
+                  builder: (_) {
+                    final characters = widget.characterStore.filteredCharacters;
+                    return GridView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 3 / 4,
                           ),
+                      itemCount:
+                          widget.characterStore.isLoadingMore
+                              ? characters.length + 1
+                              : characters.length,
+                      itemBuilder: (_, index) {
+                        if (index >= characters.length) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        final character = characters[index];
+                        return CharacterCard(
+                          character: character,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (_) => CharacterDetailsPage(
+                                      character: character,
+                                    ),
+                              ),
+                            );
+                          },
                         );
                       },
                     );
@@ -122,7 +146,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.secondary,
         foregroundColor: AppColors.primary,
-        onPressed: widget.store.getCharacters,
+        onPressed: widget.characterStore.getCharacters,
         child: const Icon(Icons.refresh),
       ),
     );

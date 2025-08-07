@@ -15,6 +15,17 @@ abstract class _CharacterStoreBase with Store {
   Timer? _timer;
 
   @observable
+  int currentPage = 1;
+
+  @observable
+  bool isLoadingMore = false;
+
+  @observable
+  bool hasNextPage = true; // baseando-se no nextPageUrl
+
+  String? _nextPageUrl;
+
+  @observable
   bool isFallback = false;
 
   @observable
@@ -44,10 +55,13 @@ abstract class _CharacterStoreBase with Store {
   @action
   Future<void> getCharacters() async {
     isLoading = true;
+    currentPage = 1;
     try {
-      final result = await repository.fetchCharacters();
+      final result = await repository.fetchCharacters(page: currentPage);
       characters.clear();
-      characters.addAll(result);
+      characters.addAll(result.characters);
+      _nextPageUrl = result.nextPageUrl;
+      hasNextPage = _nextPageUrl != null;
       isFallback = false;
     } catch (e) {
       final fallbackCharacters = [
@@ -73,7 +87,7 @@ abstract class _CharacterStoreBase with Store {
           species: 'Human',
         ),
         CharacterModel(
-          id: 3,
+          id: 4,
           name: "Jerry Smith",
           image: "assets/images/default_characters/jerry.jpg",
           status: 'Dead',
@@ -83,8 +97,27 @@ abstract class _CharacterStoreBase with Store {
       characters.clear();
       characters.addAll(fallbackCharacters);
       isFallback = true;
+      hasNextPage = false;
     } finally {
       isLoading = false;
+    }
+  }
+
+  @action
+  Future<void> loadMoreCharacters() async {
+    if (isLoadingMore || !hasNextPage) return;
+
+    isLoadingMore = true;
+    try {
+      currentPage++;
+      final result = await repository.fetchCharacters(page: currentPage);
+      characters.addAll(result.characters);
+      _nextPageUrl = result.nextPageUrl;
+      hasNextPage = _nextPageUrl != null;
+    } catch (e) {
+      currentPage--;
+    } finally {
+      isLoadingMore = false;
     }
   }
 
