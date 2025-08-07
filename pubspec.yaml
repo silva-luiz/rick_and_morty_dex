@@ -32,6 +32,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/images/
+    - assets/images/default_characters/
 
 flutter_icons:
   android: true
