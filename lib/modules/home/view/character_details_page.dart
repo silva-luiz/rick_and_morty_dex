@@ -28,12 +28,16 @@ class CharacterDetailsPage extends StatelessWidget {
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(200),
-                  child: Image.network(
-                    character.image,
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
+                  // child: Image.network(
+                  //   character.image,
+                  //   width: 200,
+                  //   height: 200,
+                  //   fit: BoxFit.cover,
+                  // ),
+                  child:
+                      character.image.startsWith('http')
+                          ? Image.network(character.image, fit: BoxFit.cover)
+                          : Image.asset(character.image, fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(height: 24),

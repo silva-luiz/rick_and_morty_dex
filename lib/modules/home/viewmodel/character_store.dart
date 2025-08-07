@@ -21,7 +21,7 @@ abstract class _CharacterStoreBase with Store {
   bool isLoadingMore = false;
 
   @observable
-  bool hasNextPage = true; // baseando-se no nextPageUrl
+  bool hasNextPage = true;
 
   String? _nextPageUrl;
 
@@ -77,20 +77,20 @@ abstract class _CharacterStoreBase with Store {
           name: "Rick Sanchez",
           image: "assets/images/default_characters/rick.jpg",
           status: 'Alive',
-          species: 'Alien',
+          species: 'Human',
         ),
         CharacterModel(
           id: 3,
           name: "Beth Smith",
           image: "assets/images/default_characters/beth.jpg",
-          status: 'Dead',
+          status: 'Alive',
           species: 'Human',
         ),
         CharacterModel(
           id: 4,
           name: "Jerry Smith",
           image: "assets/images/default_characters/jerry.jpg",
-          status: 'Dead',
+          status: 'Alive',
           species: 'Human',
         ),
       ];
