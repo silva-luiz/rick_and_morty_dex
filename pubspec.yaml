@@ -18,6 +18,7 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   flutter_native_splash: ^2.4.6
   flutter_launcher_icons: ^0.14.4
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   mobx_codegen: ^2.7.0
